@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../services/auth-guard.service';
 import { CanDeactivateGuard } from '../services/canDeactivate-guard.service';
 import { ReceiptComponent } from './print/receipt.component';
-import { TripResolver } from './services/trip-resolver.service';
 import { TripComponent } from './trip/trip.component';
 import { TripsComponent } from './trips/trips.component';
 
@@ -15,7 +14,6 @@ const routes: Routes = [
     children: [
       { 
         path: 'edit-trip',
-        // resolve: [TripResolver],
         children: [
           { path: 'new', component: TripComponent},
           { path: ':id', component: TripComponent, canDeactivate: [CanDeactivateGuard]},

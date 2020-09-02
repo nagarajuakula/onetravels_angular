@@ -44,7 +44,7 @@ export class TripComponent implements OnInit {
     } else {
       this.tripService.addTrip(this.tripForm.value);
     }
-    this.router.navigate(["/trips"], { relativeTo: this.aRoute});
+    
   }
 
   cancel() {

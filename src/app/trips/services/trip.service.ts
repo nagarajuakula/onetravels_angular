@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -7,25 +7,26 @@ import { Trip } from 'src/app/shared/models/trip';
 import { TRIPS_API } from 'src/app/shared/constants';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { User } from 'src/app/shared/models/user';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
 })
-export class TripsService {
+export class TripsService{
 
     trips: Trip[] = [];
-    user: User;
     isLoading = true;
     constructor(private http: HttpClient,
-                private snackBarService: SnackBarService) { 
-                   this.user = JSON.parse(sessionStorage.getItem("loggedInUser"));
-                }
+                private snackBarService: SnackBarService,
+                private router: Router,
+                private aRoute: ActivatedRoute) {  }
 
     getTrips(): Observable<Trip[]> {
         if (this.trips.length !== 0) {
             return of(this.trips);
         }
-        return this.http.get<Trip[]>(TRIPS_API + `/${this.user.id}`, {reportProgress: true})
+        const user = JSON.parse(sessionStorage.getItem("loggedInUser"));
+        return this.http.get<Trip[]>(TRIPS_API + `/${user.id}`, {reportProgress: true})
             .pipe(map(data => {
                 this.trips = data;
                 this.isLoading = false;
@@ -46,17 +47,20 @@ export class TripsService {
                 let index = this.trips.findIndex(prod => prod.id === trip.id);
                 this.trips[index] = trip;
                 this.isLoading = false;
-                
+                this.snackBarService.show("Trip updated successfully");
+                this.router.navigate(["/trips"], { relativeTo: this.aRoute});
             });
     }
 
     addTrip(trip: Trip) {
         this.isLoading = true;
-        this.http.post<Trip>(TRIPS_API + `/create/${this.user.id}`, trip, { reportProgress: true})
+        const user = JSON.parse(sessionStorage.getItem("loggedInUser"));
+        this.http.post<Trip>(TRIPS_API + `/create/${user.id}`, trip, { reportProgress: true})
             .subscribe(data => {
                 this.isLoading = false;
                 this.trips.push(data);
                 this.snackBarService.show("Trip added successfully");
+                this.router.navigate(["/trips"], { relativeTo: this.aRoute});
             });
     }
 

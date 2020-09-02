@@ -18,8 +18,7 @@ export class EditUserComponent implements OnInit {
 
   constructor(private router: Router,
               private aRoute: ActivatedRoute,
-              private userService: UserService,
-              private authService: AuthService) { }
+              private userService: UserService) { }
 
   ngOnInit(): void {
     let userId = +this.aRoute.snapshot.params['id'];
@@ -44,7 +43,6 @@ export class EditUserComponent implements OnInit {
     } else {
       this.userService.addUser(this.userForm.value);
     }
-    this.router.navigate(["/users"], { relativeTo: this.aRoute});
   }
 
   cancel() {

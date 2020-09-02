@@ -1,5 +1,6 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { USER_API } from '../shared/constants';
@@ -15,7 +16,9 @@ export class UserService {
     isLoading = false;
     retrievedImage: any;
     constructor(private http: HttpClient,
-        private snackBarService: SnackBarService) { }
+                private snackBarService: SnackBarService,
+                private router: Router,
+                private aRoute: ActivatedRoute,) { }
 
     getUsers(): Observable<User[]> {
         this.isLoading = true;
@@ -28,7 +31,6 @@ export class UserService {
     }
 
     getUser(id: number): User {
-        // return this.http.get<User>(USER_API + "/" +id);
         return this.users.find(user => user.id === id);
     }
 
@@ -46,6 +48,7 @@ export class UserService {
                 } else {
                     console.log(response.status + " with " + response.statusText);
                 }
+                this.router.navigate(["/users"], { relativeTo: this.aRoute});
             });
     }
 
@@ -60,6 +63,7 @@ export class UserService {
                 } else {
                     console.log(response.status + " with message " + response.statusText);
                 }
+                this.router.navigate(["/users"], { relativeTo: this.aRoute});
             });
     }
 

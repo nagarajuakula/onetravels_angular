@@ -35,13 +35,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate([returnTo || "/trips" ]);
     },
     err => {
-      this.errorMsg = JSON.parse(err.error)["error"]
+      this.errorMsg = JSON.parse(err.error)["error"];
     });
-  }
-
-  logout() {
-    this.authService.isLoggedIn = false;
-    sessionStorage.clear();
-    this.router.navigate(["/login"]);
   }
 }
