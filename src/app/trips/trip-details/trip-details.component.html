@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <img src="../../../assets/images/female.png" class="card-img-top" width="200px" height="200px"
+                    alt="...">
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Trip Details</h5>
+                    <table class="table" cellspacing="0" style="max-height: 28px;">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>{{ trip.id }}</td>
+                            </tr>
+                            <!-- <tr *ngIf="trip.category === 'Books'">
+                                <th scope="row">Author</th>
+                                <td>{{ trip.author }}</td>
+                            </tr> -->
+                            <tr>
+                                <th scope="row">Description</th>
+                                <td>{{ trip.id }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Price</th>
+                                <td>₹ {{ trip.id }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-success" style="width: 110px;"
+                (click)="editTrip()" *ngIf="isLoggedIn === true">Edit</button>
+                <button class="btn btn-danger" style="width: 110px;"
+                (click)="deleteTrip()"  *ngIf="isLoggedIn === true">Delete</button>
+        </div>
+    </div>
+</div>

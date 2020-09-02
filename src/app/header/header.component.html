@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg bg-primary">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" 
+    data-target="#navbarTogglerDemo03" 
+    aria-controls="navbarTogglerDemo03" aria-expanded="false" 
+    aria-label="Toggle navigation">
+    <span class="navbar-toggler-bar navbar-kebab"></span>
+    <span class="navbar-toggler-bar navbar-kebab"></span>
+    <span class="navbar-toggler-bar navbar-kebab"></span>
+    </button>
+    <div class="logo">
+      <a routerLink="/trips" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="assets/images/IMG_0069.JPG">
+          </div>
+        </a>
+    </div>
+    <a class="navbar-brand" style="color: azure;padding-left: 0.3125rem;" routerLink="">One Travels</a>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo03">
+      <ul class="navbar-nav mt-2 mt-lg-0 ">
+        <li class="nav-item">
+          <form>
+            <div class="input-group no-border">
+              <!-- <input class="form-control" type="text" id="search" name="search" autocomplete="off" placeholder="Search..."
+              [(ngModel)]="tripService.searchTerm"> -->
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="nc-icon nc-zoom-split"></i>
+                </div>
+              </div>
+            </div>
+        </form>
+        </li>&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        <li class="nav-item" *ngIf="authService.isLoggedIn">
+          <div>
+            <a (click)="addTrip()" style="cursor: pointer; color: black;">
+              Add Trip
+            </a>
+          </div>
+        </li>&nbsp;&nbsp;
+        <li class="nav-item" *ngIf="!authService.isLoggedIn">
+          <div>
+            <a (click)="login()" style="cursor: pointer;color: black;">
+              Login
+            </a>
+          </div>
+        </li>
+        <li class="nav-item" *ngIf="authService.isLoggedIn">
+          <button mat-icon-button [matMenuTriggerFor]="menu" 
+          aria-label="Example icon-button with a menu">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>logout</mat-icon>
+              <span (click)="logout()">Logout</span>
+            </button>
+          </mat-menu>
+        </li>&nbsp;&nbsp;&nbsp;&nbsp;
+      </ul>
+    </div>
+  </div>
+</nav>
