@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit{
                     // console.log(response);
                     let reader = new FileReader();
                     reader.addEventListener("load", () => {
-                        this.retrievedImage = 'data:image/jpeg;base64,' + reader.result.toString().replace("data:application/json;base64,","");
+                        this.retrievedImage = reader.result.toString().replace("application/json","image/jpeg");
                     });
     
                     if(response) {
