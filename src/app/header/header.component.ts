@@ -22,11 +22,13 @@ export class HeaderComponent implements OnInit{
     }
 
     login() {
+        // localStorage.clear();
+        // this.authService.isLoggedIn = false;
         this.router.navigate(['/'], { relativeTo: this.aRoute});
     }
 
     logout() {
-        window.sessionStorage.clear();
+        localStorage.clear();
         this.authService.isLoggedIn = false;
         this.authService.user = null;
         this.router.navigateByUrl('/');

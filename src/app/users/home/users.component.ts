@@ -5,7 +5,6 @@ import { MatSort } from '@angular/material/sort';
 import { UserService } from 'src/app/services/users.service';
 import { User } from 'src/app/shared/models/user';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-users',

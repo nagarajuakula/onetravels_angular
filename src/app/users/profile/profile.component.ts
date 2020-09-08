@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { CanDeactivteDialogService } from 'src/app/services/canDeactivateDialog.service';
 import { UserService } from 'src/app/services/users.service';
-import { AppStorage } from 'src/app/shared/AppStorage';
 import { User } from 'src/app/shared/models/user';
 
 @Component({
@@ -14,22 +16,39 @@ export class ProfileComponent implements OnInit{
     selectedPhoto: File;
     profileForm: FormGroup;
     imageUrl: any;
+    retrievedImage: any;
+    isSubmitted = false;
     // base64Data: any;
 
-    constructor(private userService: UserService) {}
+    constructor(private userService: UserService,
+        private dialogService: CanDeactivteDialogService,
+        private router: Router) {}
 
     ngOnInit(): void {
-        this.loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+        this.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
         // if(!this.loggedInUser.profilePic) {
-            this.userService.getProfilePic(this.loggedInUser.id);
-            this.imageUrl= this.userService.retrievedImage;
-        // }
+            this.userService.getProfilePic(this.loggedInUser.id)
+            .subscribe(
+                response => {
+                    // console.log(response);
+                    let reader = new FileReader();
+                    reader.addEventListener("load", () => {
+                        this.retrievedImage = 'data:image/jpeg;base64,' + reader.result.toString().replace("data:application/json;base64,","");
+                    });
+    
+                    if(response) {
+                        reader.readAsDataURL(response);
+                    }
+                }
+            );
+        
           this.profileForm = new FormGroup({
             id: new FormControl(this.loggedInUser.id),
             username: new FormControl(this.loggedInUser.username, [Validators.required]),
             mobile: new FormControl(this.loggedInUser.mobile, [Validators.required]),
             password: new FormControl(this.loggedInUser.password, [Validators.required]),
-            profilePic: new FormControl(this.loggedInUser.profilePic),
+            // profilePic: new FormControl(`${this.retrievedImage ? this.loggedInUser.username: ""}.jpg`)
+            // profilePic: new FormControl("")
           });
     }
 
@@ -51,10 +70,26 @@ export class ProfileComponent implements OnInit{
             uploadImageData.append('imageFile', this.selectedPhoto, this.selectedPhoto.name);
         // }
         
-        this.userService.saveProfilePic(this.profileForm.controls.id.value, uploadImageData);
+        this.userService.saveProfilePic(this.profileForm.controls.id.value, uploadImageData)
+        ;
+        
     }
 
     updateUser() {
+        this.isSubmitted = true;
+        // const username = this.profileForm.controls.username.value;
+        // this.profileForm.controls.profilePic.setValue(`${username}.jpg`);
         this.userService.updateUser(this.profileForm.value);
     }
+
+    cancel() {
+        this.router.navigateByUrl('/users');
+      }
+    
+      canDeactivate(): Observable<boolean> | boolean {
+        if(this.profileForm.dirty && this.isSubmitted === false) {
+          return this.dialogService.confirm('Discard changes to Driver?');
+        }
+        return true;
+      }
 }

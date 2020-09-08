@@ -21,7 +21,7 @@ export class UserResolver implements Resolve<User[]>{
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): User[] | import("rxjs").Observable<User[]> | Promise<User[]> {
         // removing JWT Token incase we reload the page after login
         if(!this.authService.isLoggedIn) {
-            sessionStorage.removeItem(AUTH_KEY);
+            localStorage.removeItem(AUTH_KEY);
         }
         if(this.userService.users.length !== 0) {
             return this.userService.users;

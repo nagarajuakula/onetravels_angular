@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  rabbitmq-container:
+    image: rabbitmq:3-management
+    environment: 
+      - SPRING_RABBITMQ_HOST:my-rabbit
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - onetravels-network
+      
+  onetravels-springboot:
+    build:
+      context: ../../
+      dockerfile: ../../Dockerfile
+    ports:
+      - 8085:8085
+    depends_on:
+      - rabbitmq-container
+    networks:
+      - onetravels-network
+
+  onetravels_angular:
+    image: node:10-alpine
+    container_name: onetravels_angular
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - 4200:80
+    depends_on:
+      - onetravels-springboot
+    networks:
+      - onetravels-network
+    
+networks:
+  onetravels-network:
+    external: 
+      name: onetravels-network

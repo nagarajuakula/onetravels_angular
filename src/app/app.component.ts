@@ -1,8 +1,5 @@
-import { AfterViewInit, OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { AuthService } from './auth/services/auth.service';
-import { AppStorage } from './shared/AppStorage';
-import { User } from './shared/models/user';
 
 @Component({
   selector: 'app-root',

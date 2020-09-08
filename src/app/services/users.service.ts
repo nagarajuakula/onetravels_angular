@@ -1,4 +1,4 @@
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -78,29 +78,20 @@ export class UserService {
             });
     }
 
-    saveProfilePic(id: number, imageData: FormData) {
+    saveProfilePic(id: number, imageData: FormData){
         this.isLoading = true;
-        this.http.post<User>(USER_API + `/${id}`, imageData,
+        return this.http.post<User>(USER_API + `/${id}`, imageData,
                             {observe: 'response'})
-            .subscribe(response => {
-                if(response.status=== 200) {
-                    this.snackBarService.show("Profile Picture updated successfully");
-                } else {
-                    console.log(response.status + " with " + response.statusText);
-                }
+            // .pipe(map(response => {
+                .subscribe(response => {
+                this.snackBarService.show("Profile Picture updated successfully");
+                return response.body["profilePic"];
             });
     }
 
     getProfilePic(id: number) {
-        this.http.get(USER_API + `/${id}/profilePic`)
-        .pipe(map(res => {
-            console.log(res);
-        })).subscribe(
-            response => {
-                const res = response;
-                let base64Data = res;
-                this.retrievedImage = 'data:image/jpeg;base64,' + base64Data;
-            }
-        );
+         return this.http.get(USER_API + `/${id}/profilePic`, {
+            responseType: 'blob'
+        });
     }
 }

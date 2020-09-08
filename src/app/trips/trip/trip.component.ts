@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { CanDeactivteDialogService } from 'src/app/services/canDeactivateDialog.service';
 
 import { Trip } from 'src/app/shared/models/trip';
 import { TripsService } from '../services/trip.service';
@@ -15,10 +17,18 @@ export class TripComponent implements OnInit {
   tripForm: FormGroup;
   trip: Trip;
   editMode = false;
+  maxDate: Date;
+  isSubmitted = false;
 
   constructor(private router: Router,
               private aRoute: ActivatedRoute,
-              public tripService: TripsService) { }
+              public tripService: TripsService,
+              private dialogService: CanDeactivteDialogService) {
+                const currentYear = new Date().getFullYear();
+                const currentDate = new Date().getDate();
+                const currentMonth = new Date().getMonth();
+                this.maxDate = new Date(currentYear, currentMonth, currentDate);
+               }
 
   ngOnInit(): void {
     let tripId = +this.aRoute.snapshot.params['id'];
@@ -39,6 +49,7 @@ export class TripComponent implements OnInit {
   }
 
   addOrEditTrip() {
+    this.isSubmitted = true;
     if(this.editMode) {
       this.tripService.updateTrip(this.tripForm.value);
     } else {
@@ -49,6 +60,13 @@ export class TripComponent implements OnInit {
 
   cancel() {
     this.router.navigateByUrl('/trips');
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if(this.tripForm.dirty && this.isSubmitted === false) {
+      return this.dialogService.confirm('Discard changes to trip?');
+    }
+    return true;
   }
 
 }

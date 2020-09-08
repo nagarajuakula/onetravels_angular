@@ -35,7 +35,13 @@ export class LoginComponent implements OnInit {
       this.router.navigate([returnTo || "/trips" ]);
     },
     err => {
-      this.errorMsg = JSON.parse(err.error)["error"];
-    });
+      if(err.status === 504) {
+        this.errorMsg = "Server is not responding. Please try after some time";
+      } else if(err.status == 403) {
+        this.errorMsg = "Please use correct user name and password";
+      }
+      // console.log(err.statusText);
+    }
+    );
   }
 }

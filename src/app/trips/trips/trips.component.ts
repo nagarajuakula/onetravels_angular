@@ -8,9 +8,6 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { jsPDF } from 'jspdf';
-import { Overlay } from '@angular/cdk/overlay';
-import { ReceiptComponent } from 'src/app/trips/print/receipt.component';
 
 @Component({
   selector: 'app-trips',
@@ -19,7 +16,7 @@ import { ReceiptComponent } from 'src/app/trips/print/receipt.component';
 })
 export class TripsComponent implements OnInit {
 
-  trips: Trip[] = [];
+  // trips: Trip[] = [];
   displayedColumns: string[] = ['id', 'date', 'from_location', 'to_location', 'distance', 'edit', 'delete', 'print'];
   dataSource: MatTableDataSource<Trip>;
 
@@ -34,10 +31,16 @@ export class TripsComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.tripsService.tripsSubject.subscribe((modifiedTrips: Trip[]) => {
+        this.tripsService.trips = modifiedTrips;
+        this.dataSource = new MatTableDataSource(modifiedTrips);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+    });
       this.tripsService.getTrips().subscribe(trips => {
-        this.trips = trips;
+        // this.trips = trips;
         this.tripsService.isLoading = false;
-        this.dataSource = new MatTableDataSource(this.trips);
+        this.dataSource = new MatTableDataSource(trips);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     });

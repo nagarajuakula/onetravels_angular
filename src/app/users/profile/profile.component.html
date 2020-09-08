@@ -1,4 +1,4 @@
-<!-- <img [src]="loggedInUser.profilePic" height="200" *ngIf="loggedInUser.profilePic"> -->
+<img [src]="retrievedImage" height="200" *ngIf="retrievedImage">
 <form [formGroup]="profileForm" (ngSubmit)="updateUser()"  role="form">
     <div class="form-group">
         <label for="name">Name</label>&nbsp;
@@ -18,11 +18,15 @@
         formControlName="password"
         required>
     </div>
+    <!-- <div class="form-group">
+        <input type="hidden" class="form-control" name="this.loggedInUser.profilePic" id="profilePic"
+        formControlName="profilePic">
+    </div> -->
     <div class="form-group">
-        <label for="image">Profile Pic</label>&nbsp;
+        <label for="image">Profile Picture</label>&nbsp;
         <input type="file" class="form-control" accept="image/*" id="image" 
-                name="image" style="display: none"
-                formControlName="profilePic"
+                name="retrievedImage" style="display: none"
+                
                 #imageInput 
                 (change)="onPhotoChanged($event)" 
                 required>
@@ -31,6 +35,7 @@
         <button (click)="saveProfilePic()" type="button" *ngIf="imageUrl">Upload</button>
     </div>
     <div class="form-group">
-        <button type="submit" class="btn btn-primary" >Save</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!profileForm.dirty">Save</button>
+        &nbsp;&nbsp;<button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
     </div>
 </form>

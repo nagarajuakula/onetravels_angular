@@ -13,7 +13,7 @@ export class AuthGuardService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | import("@angular/router").UrlTree | import("rxjs").Observable<boolean | import("@angular/router").UrlTree> | Promise<boolean | import("@angular/router").UrlTree> {
         const url = state.url;
         if (!this.authService.isLoggedIn) {
-            sessionStorage.clear();
+            localStorage.clear();
             return this.router.navigate(["/auth"], {
                 queryParams: {
                     returnTo: url
