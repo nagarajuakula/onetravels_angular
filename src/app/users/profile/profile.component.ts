@@ -18,7 +18,6 @@ export class ProfileComponent implements OnInit{
     imageUrl: any;
     retrievedImage: any;
     isSubmitted = false;
-    // base64Data: any;
 
     constructor(private userService: UserService,
         private dialogService: CanDeactivteDialogService,
@@ -46,8 +45,6 @@ export class ProfileComponent implements OnInit{
             username: new FormControl(this.loggedInUser.username, [Validators.required]),
             mobile: new FormControl(this.loggedInUser.mobile, [Validators.required]),
             password: new FormControl(this.loggedInUser.password, [Validators.required]),
-            // profilePic: new FormControl()
-            // profilePic: new FormControl("")
           });
     }
 
@@ -67,7 +64,6 @@ export class ProfileComponent implements OnInit{
             const uploadImageData = new FormData();
             uploadImageData.append('imageFile', this.selectedPhoto, this.selectedPhoto.name);
             return uploadImageData;
-        // this.userService.saveProfilePic(this.profileForm.controls.id.value, uploadImageData);
     }
 
     updateUser() {
