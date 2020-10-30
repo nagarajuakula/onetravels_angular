@@ -10,5 +10,6 @@ export class AppComponent{
 
   title = 'One Travels';
   constructor(public authService: AuthService) {
+  console.log("hellow word");
   }
 }
