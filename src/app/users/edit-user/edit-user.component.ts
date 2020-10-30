@@ -42,7 +42,7 @@ export class EditUserComponent implements OnInit {
 
   addOrEditUser() {
     if(this.editMode) {
-      this.userService.updateUser(this.userForm.value);
+      this.userService.updateUser(this.userForm.value, null);
     } else {
       this.userService.addUser(this.userForm.value);
     }

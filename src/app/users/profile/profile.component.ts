@@ -30,7 +30,6 @@ export class ProfileComponent implements OnInit{
             this.userService.getProfilePic(this.loggedInUser.id)
             .subscribe(
                 response => {
-                    // console.log(response);
                     let reader = new FileReader();
                     reader.addEventListener("load", () => {
                         this.retrievedImage = reader.result.toString().replace("application/json","image/jpeg");
@@ -47,7 +46,7 @@ export class ProfileComponent implements OnInit{
             username: new FormControl(this.loggedInUser.username, [Validators.required]),
             mobile: new FormControl(this.loggedInUser.mobile, [Validators.required]),
             password: new FormControl(this.loggedInUser.password, [Validators.required]),
-            // profilePic: new FormControl(`${this.retrievedImage ? this.loggedInUser.username: ""}.jpg`)
+            // profilePic: new FormControl()
             // profilePic: new FormControl("")
           });
     }
@@ -64,22 +63,19 @@ export class ProfileComponent implements OnInit{
         }
     }
 
-    saveProfilePic() {
-        // if(this.selectedPhoto) {
+    private saveProfilePic() {
             const uploadImageData = new FormData();
             uploadImageData.append('imageFile', this.selectedPhoto, this.selectedPhoto.name);
-        // }
-        
-        this.userService.saveProfilePic(this.profileForm.controls.id.value, uploadImageData)
-        ;
-        
+            return uploadImageData;
+        // this.userService.saveProfilePic(this.profileForm.controls.id.value, uploadImageData);
     }
 
     updateUser() {
         this.isSubmitted = true;
-        // const username = this.profileForm.controls.username.value;
-        // this.profileForm.controls.profilePic.setValue(`${username}.jpg`);
-        this.userService.updateUser(this.profileForm.value);
+        let imageData = null;
+        if(this.selectedPhoto) 
+        imageData = this.saveProfilePic();
+        this.userService.updateUser(this.profileForm.value, imageData);
     }
 
     cancel() {

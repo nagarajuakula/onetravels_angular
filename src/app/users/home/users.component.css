@@ -10,3 +10,13 @@ table {
   td, th {
     width: 25%;
   }
+
+  ::ng-deep  .user-table >tbody >tr >td:nth-child(4) >button {
+    border: none;
+    background-color: inherit;
+    outline: 0;
+}
+
+  ::ng-deep .mat-icon {
+    color: #022a4f;
+  }

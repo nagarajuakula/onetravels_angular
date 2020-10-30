@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { USER_API } from '../shared/constants';
 import { User } from '../shared/models/user';
 import { SnackBarService } from './snackbar.service';
@@ -34,10 +34,20 @@ export class UserService {
         return this.users.find(user => user.id === id);
     }
 
-    updateUser(user: User) {
+    updateUser(user: User, imageData: FormData) {
         this.isLoading = true;
         this.http.put<User>(USER_API, user,
-                            {observe: 'response'})
+                            {observe: 'response'}).
+            pipe(map(data => {
+                this.users = this.users.filter(item => {
+                    item.id === user.id});
+                this.users.push(data.body);
+                return data.body;
+                // this.isLoading = false;
+                // this.snackBarService.show("User updated successfully");
+            }),
+            mergeMap(user => this.http.post<User>(USER_API + `/${user.id}`, imageData,
+            {observe: 'response'})))
             .subscribe(response => {
                 if(response.status=== 200) {
                     this.users = this.users.filter(item => {
