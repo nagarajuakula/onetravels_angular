@@ -6,6 +6,8 @@
     "start": "ng serve --proxy-config proxy.config.json",
     "build": "ng build",
     "test": "ng test",
+    "format:fix": "pretty-quick --staged",
+    "precommit": "run-s format:fix lint",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
